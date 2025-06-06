@@ -2,6 +2,7 @@ import json
 from flask import Flask, request, jsonify
 from main import main
 import logging
+from real_time import get_stock_realtime_data  # 导入实时盘口数据函数
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -34,6 +35,28 @@ def stock_analysis():
     
     except Exception as e:
         logging.error(f"处理请求时出错: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/realtime-data', methods=['GET'])
+def realtime_data():
+    """
+    实时盘口数据API
+    参数:
+    - symbol: 股票代码，如 "000895"
+    """
+    try:
+        # 获取请求参数
+        symbol = request.args.get('symbol', '000895')
+        
+        # 调用实时数据函数
+        logging.info(f"获取股票 {symbol} 的实时盘口数据")
+        result_json = get_stock_realtime_data(symbol)
+        result = json.loads(result_json)  # 将JSON字符串转换为字典
+        
+        return jsonify(result)
+    
+    except Exception as e:
+        logging.error(f"获取实时数据时出错: {e}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/health', methods=['GET'])
@@ -76,6 +99,18 @@ def home():
                 </ul>
                 <p><strong>示例:</strong></p>
                 <pre>/stock-analysis?symbol=000895&start_date=20240101&end_date=20240630</pre>
+            </div>
+            
+            <div class="endpoint">
+                <h2>实时盘口数据</h2>
+                <p><strong>端点:</strong> /realtime-data</p>
+                <p><strong>方法:</strong> GET</p>
+                <p><strong>参数:</strong></p>
+                <ul>
+                    <li>symbol: 股票代码，如 "000895"</li>
+                </ul>
+                <p><strong>示例:</strong></p>
+                <pre>/realtime-data?symbol=000895</pre>
             </div>
             
             <div class="endpoint">
