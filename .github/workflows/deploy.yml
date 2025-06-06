@@ -33,4 +33,4 @@ jobs:
           ./ $SSH_USER@$SERVER_IP:$PROJECT_DIR
 
         # 触发服务器端部署
-        ssh $SSH_USER@$SERVER_IP "cd $PROJECT_DIR && uv sync && source .venv/bin/activate && systemctl restart stock-teach"
+        ssh $SSH_USER@$SERVER_IP "cd $PROJECT_DIR && uv sync  -i https://pypi.tuna.tsinghua.edu.cn/simple && source .venv/bin/activate && systemctl restart stock-teach"
