@@ -1,4 +1,4 @@
-name: Deploy Flask to Server
+name: Deploy to CentOS 7 Server
 
 on:
   push:
@@ -12,52 +12,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
-
-    - name: Install UV
-      run: |
-        # 安装最新版 uv
-        curl -LsSf https://astral.sh/uv/install.sh | sh
-        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-
-    - name: Install dependencies with UV
-      run: |
-        # 使用 uv 安装依赖
-        uv sync
-
     - name: Setup SSH
       uses: webfactory/ssh-agent@v0.7.0
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Deploy to Server
+    - name: Sync Code to Server
       env:
         SERVER_IP: ${{ secrets.SERVER_IP }}
         SSH_USER: ${{ secrets.SSH_USERNAME }}
         PROJECT_DIR: "/var/www/myflaskapp"
       run: |
-        # 创建远程目录
-        ssh -o StrictHostKeyChecking=no $SSH_USER@$SERVER_IP \
-          "mkdir -p $PROJECT_DIR"
-        
-        # 同步代码
+        # 同步代码到服务器（排除不需要的文件）
         rsync -avz --delete \
+          -e "ssh -o StrictHostKeyChecking=no" \
           --exclude '.git/' \
           --exclude 'venv/' \
           --exclude '__pycache__/' \
+          --exclude '.env' \
           ./ $SSH_USER@$SERVER_IP:$PROJECT_DIR
 
-        # 服务器端部署命令（保持使用 pip 或改为 uv）
-        ssh $SSH_USER@$SERVER_IP "
-          cd $PROJECT_DIR
-          uv venv
-          # 激活虚拟环境
-          source .venv/bin/activate
-          
-          uv sync
-          
-          sudo systemctl restart  stock-teach
-        "
+        # 触发服务器端部署
+        ssh $SSH_USER@$SERVER_IP "cd $PROJECT_DIR && uv sync && source .venv/bin/activate && systemctl restart stock-teach"
