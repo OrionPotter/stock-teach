@@ -5,7 +5,7 @@ import urllib3
 import requests
 import random
 import datetime
-from core.logging import logging
+from app.core.logging import logging
 
 # 尝试导入备选库
 try:

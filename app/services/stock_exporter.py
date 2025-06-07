@@ -3,7 +3,7 @@ import argparse
 import os
 from datetime import datetime
 
-from core.logging import logging
+from app.core.logging import logging
 
 # 导入自定义模块
 from app.services.data_fetcher import fetch_stock_data

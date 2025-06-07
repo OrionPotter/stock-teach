@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import akshare as ak
 
-from core.logging import logging
+from app.core.logging import logging
 
 from app.services.data_fetcher import fetch_stock_data
 from app.services.tech_indicators import calculate_moving_averages, calculate_oscillator_indicators

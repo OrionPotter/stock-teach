@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from core.logging import logging
+from app.core.logging import logging
 
 def calculate_rsi(data, period=14):
     """
