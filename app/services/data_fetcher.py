@@ -2,7 +2,6 @@ import pandas as pd
 import akshare as ak
 import time
 import urllib3
-import requests
 import random
 import datetime
 from app.core.logging import logging

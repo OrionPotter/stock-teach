@@ -11,7 +11,7 @@ setup_logging()
 
 # 创建FastAPI应用
 app = FastAPI(
-    title="股票技术分析API",
+    title="股票分析数据平台",
     description="提供股票技术分析、实时盘口数据和数据导出功能的API",
     version="0.1.0",
     # 确保启用 OpenAPI 和 Swagger UI
