@@ -47,7 +47,7 @@ async def home():
     return """
     <html>
         <head>
-            <title>股票技术分析API</title>
+            <title>股票分析数据平台</title>
             <style>
                 body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
                 h1 { color: #333; }
