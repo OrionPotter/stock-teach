@@ -1,12 +1,32 @@
 [project]
 name = "stock-tech"
 version = "0.1.0"
-description = "Add your description here"
+description = "股票技术分析API"
 readme = "README.md"
 requires-python = ">=3.13"
+
 dependencies = [
-    "akshare>=1.16.95",
-    "flask>=3.1.1",
-    "matplotlib>=3.10.3",
-    "pandas>=2.2.3",
+    "akshare==1.16.95", # 最新支持3.13的版本
+    "fastapi==0.112.0", # FastAPI最新稳定版
+    "uvicorn==0.30.0", # Uvicorn最新稳定版
+    "pandas==2.2.3", # 支持3.13的最高版本
 ]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# 添加这个部分，指定要包含的包
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"

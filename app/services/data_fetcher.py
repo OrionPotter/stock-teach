@@ -5,10 +5,7 @@ import urllib3
 import requests
 import random
 import datetime
-import logging
-
-# 配置日志
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+from core.logging import logging
 
 # 尝试导入备选库
 try:

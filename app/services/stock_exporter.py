@@ -2,13 +2,12 @@ import pandas as pd
 import argparse
 import os
 from datetime import datetime
-import logging
+
+from core.logging import logging
 
 # 导入自定义模块
-from data_fetcher import fetch_stock_data
+from app.services.data_fetcher import fetch_stock_data
 
-# 配置日志
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def calculate_daily_change(data):
     """
