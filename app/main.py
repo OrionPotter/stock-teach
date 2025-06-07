@@ -68,7 +68,7 @@ async def home():
             </style>
         </head>
         <body>
-            <h1>股票技术分析API</h1>
+            <h1>股票数据分析平台</h1>
             <p>使用此API可以获取股票的技术分析指标和信号。</p>
             <p>
                 <a href="/docs" class="swagger-button">Swagger UI 交互式文档</a>
