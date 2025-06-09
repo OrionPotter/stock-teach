@@ -271,9 +271,13 @@ def calculate_ultimate_oscillator(data, short_period=7, mid_period=14, long_peri
     
     return uo.iloc[-1]
 
+
+
 def calculate_moving_averages(data):
     """
-    计算各种移动平均线
+    计算SMA和EMA,并生成交易信号
+    :param data: DataFrame,需包含 'close' 列
+    :return: 包含MA数据的DataFrame
     """
     ma_data = {
         '名称': [],
@@ -281,29 +285,26 @@ def calculate_moving_averages(data):
         '信号': []
     }
     
-    # 计算EMA和SMA
     periods = [10, 20, 30, 50, 100, 200]
-    for period in periods:
-        ema = data['close'].ewm(span=period, adjust=False).mean().iloc[-1]
-        sma = data['close'].rolling(window=period).mean().iloc[-1]
-        
-        current_price = data['close'].iloc[-1]
-        
-        # 添加EMA数据
-        ma_data['名称'].append(f'指数移动平均线({period})')
-        ma_data['值'].append(round(ema, 2))
-        ma_data['信号'].append('买入' if current_price > ema else '卖出')
-        
-        # 添加SMA数据
-        ma_data['名称'].append(f'简单移动平均线({period})')
-        ma_data['值'].append(round(sma, 2))
-        ma_data['信号'].append('买入' if current_price > sma else '卖出')
+    current_price = data['close'].iloc[-1]
     
-    # 添加其他移动平均线指标
-    # 这里简化处理，实际应用中需要实现具体算法
-    ma_data['名称'].extend(['一阶导数变化率 (9, 26, 52, 26)', '交叉偏好的指数平均线 VWMA (20)', '超体移动平均线 Hull MA (9)'])
-    ma_data['值'].extend([round(np.random.uniform(20, 30), 2) for _ in range(3)])
-    ma_data['信号'].extend(np.random.choice(['买入', '卖出', '中立'], 3))
+    for period in periods:
+        if len(data) >= period:
+            # 计算SMA
+            sma = data['close'].rolling(window=period).mean().iloc[-1]
+            ma_data['名称'].append(f'SMA({period})')
+            ma_data['值'].append(round(sma, 2))
+            ma_data['信号'].append('买入' if current_price > sma else '卖出')
+            
+            # 计算EMA
+            ema = data['close'].ewm(span=period, adjust=False).mean().iloc[-1]
+            ma_data['名称'].append(f'EMA({period})')
+            ma_data['值'].append(round(ema, 2))
+            ma_data['信号'].append('买入' if current_price > ema else '卖出')
+        else:
+            ma_data['名称'].extend([f'SMA({period})', f'EMA({period})'])
+            ma_data['值'].extend([None, None])
+            ma_data['信号'].extend(['数据不足', '数据不足'])
     
     return pd.DataFrame(ma_data)
 
